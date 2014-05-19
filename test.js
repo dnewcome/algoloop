@@ -14,6 +14,7 @@ for(var i=0; i < portcount; i++) {
 	var name = input.getPortName(i);
     console.log(i + ' ' + name);
 }
+
 for(var i=0; i < outportcount; i++) {
 	var name = output.getPortName(i);
     console.log(i + ' ' + name);
@@ -28,10 +29,14 @@ function setCellColor(x, y, c) {
 	output.sendMessage(message);
 }
 
+/**
+ * run through array and set colors accordingly
+ * uses standard array format, must be valid array
+ */
 function setCells(a) {
 	var x, y;
-	for(x = 0; x < 8; x += 1) {
-		for(y = 0; y < 5; y += 1) {
+	for(x = 0; x < a.length; x += 1) {
+		for(y = 0; y < a[0].length; y += 1) {
 			setCellColor(x, y, a[x][y]);	
 		}
 	}
@@ -145,5 +150,4 @@ function rotateRight(a) {
 setInterval(function(){
 	setCells(rotateLeft(a1))
 }, 100);
-
 
