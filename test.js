@@ -23,18 +23,24 @@ for(var i=0; i < outportcount; i++) {
  * Use this to change the state of a cell
  */
 function setCellColor(x, y, c) {
-	var note = y + 53;
-	var command = 0x90 + x;
-	var velocity = c;	
-	output.sendMessage([note, command, velocity]);
+	var message = getMidiMessageForCell(x, y);
+	message.push(c);
+	output.sendMessage(message);
 }
 
 /**
  * Use this to look up midi note for a cell 
  */
 function getMidiMessageForCell(x, y) {
-	
-			
+	var note = y + 53;
+	var command = 0x90 + x;
+	return [command, note];	
+}
+
+function getCoordinates(message) {
+	var x = lookupColumn(message[0]);
+	var y = lookupRow(message[1]);
+	return [x, y];	
 }
 
 function lookupColumn(midiCommand) { 
@@ -62,11 +68,12 @@ function lookupRow(midiNote) {
 input.on('message', function(deltaTime, message) {
   console.log('m:' + message + ' d:' + deltaTime);
   // message[1] += octave*12;
-  console.log('column: ' + lookupColumn(message[0]));
-  console.log('row: ' + lookupRow(message[1]));
-  console.log('command: ' + lookupCommand(message[0]));
+  var coordinates = getCoordinates(message);
+  console.log('coordinates: ' + coordinates);
   console.log('sending message:');
-  //output.sendMessage([0x90 + lookupColumn(message[0]), message[1], 2]);
+  var message = getMidiMessageForCell(coordinates[0], coordinates[1]);
+  message.push(2);
+  output.sendMessage(message);
 });
 
 // Open the first available input port.
