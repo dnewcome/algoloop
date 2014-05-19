@@ -28,6 +28,15 @@ function setCellColor(x, y, c) {
 	output.sendMessage(message);
 }
 
+function setCells(a) {
+	var x, y;
+	for(x = 0; x < 8; x += 1) {
+		for(y = 0; y < 5; y += 1) {
+			setCellColor(x, y, a[x][y]);	
+		}
+	}
+}
+
 /**
  * Use this to look up midi note for a cell 
  */
@@ -92,5 +101,49 @@ input.ignoreTypes(false, false, false);
 // Close the port when done.
 // input.closePort();
 //
+//
+var a0 = [
+	[0, 0, 0, 0, 0],
+	[0, 0, 0, 0, 0],
+	[0, 0, 0, 0, 0],
+	[0, 0, 0, 0, 0],
+	[0, 0, 0, 0, 0],
+	[0, 0, 0, 0, 0],
+	[0, 0, 0, 0, 0],
+	[0, 0, 0, 0, 0]
+];
+var a1 = [
+	[1, 1, 1, 1, 1],
+	[1, 1, 1, 1, 1],
+	[1, 1, 1, 1, 1],
+	[1, 1, 1, 1, 1],
+	[1, 1, 1, 1, 1],
+	[1, 1, 1, 1, 1],
+	[1, 1, 1, 1, 1],
+	[1, 1, 1, 1, 1]
+];
+var a1 = [
+	[1, 1, 1, 1, 1],
+	[0, 0, 0, 0, 0],
+	[1, 1, 1, 1, 1],
+	[0, 0, 0, 0, 0],
+	[1, 1, 1, 1, 1],
+	[0, 0, 0, 0, 0],
+	[1, 1, 1, 1, 1],
+	[0, 0, 0, 0, 0]
+];
+
+function rotateLeft(a) {
+	a.push(a.shift());
+	return a;
+}
+function rotateRight(a) {
+	a.unshift(a.pop());
+	return a;
+}
+
+setInterval(function(){
+	setCells(rotateLeft(a1))
+}, 100);
 
 
