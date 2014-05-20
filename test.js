@@ -1,29 +1,9 @@
 var midi = require('midi');
 
-// Set up a new input.
-var input = new midi.input();
-var output = new midi.output();
-
-// Count the available input ports.
-var portcount = input.getPortCount();
-var outportcount = output.getPortCount();
-console.log('detected ' + input.getPortCount() + ' input ports');
-
-// Get the name of a specified input port.
-for(var i=0; i < portcount; i++) {
-	var name = input.getPortName(i);
-    console.log(i + ' ' + name);
-}
-
-for(var i=0; i < outportcount; i++) {
-	var name = output.getPortName(i);
-    console.log(i + ' ' + name);
-}
-
 /**
  * Use this to change the state of a cell
  */
-function setCellColor(x, y, c) {
+function setCellColor(x, y, c, output) {
 	var message = getMidiMessageForCell(x, y);
 	message.push(c);
 	output.sendMessage(message);
@@ -38,6 +18,23 @@ function setCells(a) {
 	for(x = 0; x < a.length; x += 1) {
 		for(y = 0; y < a[0].length; y += 1) {
 			setCellColor(x, y, a[x][y]);	
+		}
+	}
+}
+
+/**
+ * quick and dirty way of setting the color of root notes
+ */
+function setRootCells(a, root, output) {
+	var x, y;
+	for(x = 0; x < a.length; x += 1) {
+		for(y = 0; y < a[0].length; y += 1) {
+			if((a[x][y] - root) % 12 == 0){
+				setCellColor(x, y, 3, output);	
+			}
+			else {
+				setCellColor(x, y, 0, output);	
+			}
 		}
 	}
 }
@@ -77,29 +74,12 @@ function lookupRow(midiNote) {
 	return midiNote - 53;
 }
 
-// var octave = 1;
-// Configure a callback.
-input.on('message', function(deltaTime, message) {
-  console.log('m:' + message + ' d:' + deltaTime);
-  // message[1] += octave*12;
-  var coordinates = getCoordinates(message);
-  console.log('coordinates: ' + coordinates);
-  console.log('sending message:');
-  var message = getMidiMessageForCell(coordinates[0], coordinates[1]);
-  message.push(2);
-  output.sendMessage(message);
-});
-
-// Open the first available input port.
-input.openPort(2);
-output.openPort(2);
-
 
 // Sysex, timing, and active sensing messages are ignored
 // by default. To enable these message types, pass false for
 // the appropriate type in the function below.
 // Order: (Sysex, Timing, Active Sensing)
-input.ignoreTypes(false, false, false);
+// input.ignoreTypes(false, false, false);
 
 // ... receive MIDI messages ...
 
@@ -147,7 +127,5 @@ function rotateRight(a) {
 	return a;
 }
 
-setInterval(function(){
-	setCells(rotateLeft(a1))
-}, 100);
+module.exports.setRootCells = setRootCells;
 

@@ -1,6 +1,7 @@
 var midi = require('midi'),
 	input = new midi.input(),
 	output = new midi.output(),
+	lightout = new midi.output(),
 	PSlayer = require('./pslayer.js');
 
 var inportcount = input.getPortCount();
@@ -26,8 +27,9 @@ if(process.argv.length < 3) {
 
 else {
 	input.openPort(parseInt(process.argv[2], 10));
+	lightout.openPort(parseInt(process.argv[2], 10));
 	output.openVirtualPort("scale");
-	var slayer = new PSlayer(input, output);
+	var slayer = new PSlayer(input, output, lightout);
 }
 
 
