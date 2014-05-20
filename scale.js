@@ -51,7 +51,6 @@ function writeScale(scale, start, rows, cols, skip) {
 		ret.push([]);
 		for(y = 0; y < rows; y += 1) {
 			// TODO: change shift calculation so we can have zero shift
-			console.log('skipping: ' + (y*skip+x));
 			ret[x].unshift(getNote(scale, start, y*skip+x))
 		}
 	}
