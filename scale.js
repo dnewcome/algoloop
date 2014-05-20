@@ -42,8 +42,10 @@ function getNote(scale, start, degree) {
 function writeScale(scale, start, rows, cols, skip) {
 	var rows = rows || 5,
 		cols = cols || 8,
-		skip = skip || 3,
 		ret = [];
+		if(skip !== 0){
+			skip = skip || 3;
+		}
 
 	for(x = 0; x < cols; x += 1) {
 		ret.push([]);

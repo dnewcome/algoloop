@@ -6,6 +6,7 @@ var midi = require('midi'),
 function PSlayer(input, output, lightout) {
 	var map = scale.writeScale(scale.chrom, 48);
 	lights.setRootCells(map, 48, lightout);
+	// TODO: rename this, it means semitones now, not octave
 	var octave = 0;
 	var skip = 3;
 	console.log(map);
@@ -26,29 +27,37 @@ function PSlayer(input, output, lightout) {
 		}
 		else if(message[1] == 52 && message[0] == 0x90) {
 			console.log('maj');
-			map = scale.writeScale(scale.maj, 48 + octave);
-			lights.setRootCells(map, 48 + octave, lightout);
+			// TODO: add skip value to all writeScale
+			map = scale.writeScale(scale.maj, 48);
+			lights.setRootCells(map, 48, lightout);
 		}
 		else if(message[1] == 52 && message[0] == 0x91) {
 			console.log('nmin');
-			map = scale.writeScale(scale.nmin, 48 + octave);
-			lights.setRootCells(map, 48 + octave, lightout);
+			// TODO: add skip value to all writeScale
+			map = scale.writeScale(scale.nmin, 48);
+			lights.setRootCells(map, 48, lightout);
 		}
 		else if(message[1] == 52 && message[0] == 0x92) {
 			console.log('hmin');
-			map = scale.writeScale(scale.hmin, 48 + octave);
-			lights.setRootCells(map, 48 + octave, lightout);
+			// TODO: add skip value to all writeScale
+			map = scale.writeScale(scale.hmin, 48);
+			lights.setRootCells(map, 48, lightout);
 		}
 		else if(message[1] == 52 && message[0] == 0x93) {
 			console.log('chrom');
-			map = scale.writeScale(scale.chrom, 48 + octave);
-			lights.setRootCells(map, 48 + octave, lightout);
+			// TODO: add skip value to all writeScale
+			map = scale.writeScale(scale.chrom, 48);
+			lights.setRootCells(map, 48, lightout);
 		}
 		else if(message[1] == 86 && message[0] == 0x90) {
-			skip = ((skip + 1) % 8) + 1;
+			skip += 1;
+			// skip = 8 - ((skip + 1) % 16);
 			console.log('skip: ' + skip);
-			map = scale.writeScale(scale.chrom, 48 + octave, null, null, skip);
-			lights.setRootCells(map, 48 + octave, lightout);
+		
+			// using mod 16 lets us do -8 .. 8 skip range. this turns out not to be that useful
+			// map = scale.writeScale(scale.chrom, 48, null, null, 8-((skip + 1) % 16));
+			map = scale.writeScale(scale.chrom, 48, null, null, (skip + 1) % 9);
+			lights.setRootCells(map, 48, lightout);
 		}
 		else {
 			console.log(message);
