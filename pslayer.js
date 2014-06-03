@@ -60,7 +60,6 @@ function PSlayer(input, output, lightout) {
 			lights.setRootCells(map, 48, lightout);
 		}
 		else {
-			console.log(message);
 			var note = map[apc20.lookupColumn(message[0])][apc20.lookupRow(message[1])];
 			note += octave;
 			var cmd = message[0] & 0xF0;
