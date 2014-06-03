@@ -56,7 +56,7 @@ function PSlayer(input, output, lightout) {
 		
 			// using mod 16 lets us do -8 .. 8 skip range. this turns out not to be that useful
 			// map = scale.writeScale(scale.chrom, 48, null, null, 8-((skip + 1) % 16));
-			map = scale.writeScale(scale.chrom, 48, null, null, (skip + 1) % 9);
+			map = scale.writeScale(scale.chrom, 48, null, null, (skip + 1) % 13);
 			lights.setRootCells(map, 48, lightout);
 		}
 		else {
