@@ -1,14 +1,73 @@
 var midi = require('midi'),
 	input = new midi.input(),
 	output = new midi.output(),
-	lightout = new midi.output(),
-	PSlayer = require('./pslayer.js');
+	algo = require('./algo.js');
+	scale = require('./scale.js');
 
 var inportcount = input.getPortCount();
 var outportcount = output.getPortCount();
+var map = scale.writeScale(scale.maj, 48);
+current = 48;
 
 // enumarate ports
 if(process.argv.length < 3) {
+	enumerate();
+}
+
+else {
+}
+
+	// input.openPort(parseInt(process.argv[2], 10));
+	// lightout.openPort(parseInt(process.argv[2], 10));
+	output.openVirtualPort("algo");
+		
+	// var slayer = new PSlayer(input, output, lightout);
+	setInterval(function() {
+		current = current + algo.random_walk();
+		if(algo.rest()) {
+			console.log('channel 1 playing note: ' + current);
+			output.sendMessage([0x90, current, 0x7F]);
+		}
+		else {
+			console.log('channel 1 resting');
+		}
+	}, 1000);
+
+	setInterval(function() {
+		current = current + algo.random_walk();
+		if(algo.rest()) {
+			console.log('channel 2 playing note: ' + current);
+			output.sendMessage([0x91, current, 0x7F]);
+		}
+		else {
+			console.log('channel 2 resting');
+		}
+	}, 1000);
+
+	setInterval(function() {
+		current = current + algo.random_walk();
+		if(algo.rest()) {
+			console.log('channel 3 playing note: ' + current);
+			output.sendMessage([0x92, 0x33, 0x7F]);
+		}
+		else {
+			console.log('channel 3 resting');
+		}
+	}, 500);
+
+	setInterval(function() {
+		current = current + algo.random_walk();
+		if(algo.rest()) {
+			console.log('channel 4 playing note: ' + current);
+			output.sendMessage([0x92, 0x30, 0x7F]);
+		}
+		else {
+			console.log('channel 4 resting');
+		}
+	}, 250);
+
+
+function enumerate() {
 	console.log('Usage - specify numeric port arg as first argument');
 	console.log('input ports');
 	for(var i=0; i < inportcount; i++) {
@@ -24,14 +83,4 @@ if(process.argv.length < 3) {
 	input.closePort();
 	output.closePort();
 }
-
-else {
-	input.openPort(parseInt(process.argv[2], 10));
-	lightout.openPort(parseInt(process.argv[2], 10));
-	// send sysex to apc20 to enable "ableton" mode. This causes leds to remain on after button press
-	lightout.sendMessage([0xF0, 0x47, 0x7F, 0x7B, 0x60, 0x00, 0x04, 0x41, 0x08, 0x02, 0x01, 0xF7]);
-	output.openVirtualPort("scale");
-	var slayer = new PSlayer(input, output, lightout);
-}
-
 
