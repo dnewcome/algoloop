@@ -1,0 +1,25 @@
+{
+  "name": "algoloop",
+  "version": "1.0.0",
+  "description": "Algorithmic music generator in Javascript.",
+  "homepage": "https://github.com/dnewcome/algoloop#readme",
+  "bugs": {
+    "url": "https://github.com/dnewcome/algoloop/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/dnewcome/algoloop.git"
+  },
+  "license": "ISC",
+  "author": "",
+  "type": "commonjs",
+  "main": "cli.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node cli.js"
+  },
+  "dependencies": {
+    "midi": "^2.0.0"
+  },
+  "devDependencies": {}
+}
